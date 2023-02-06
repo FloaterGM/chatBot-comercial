@@ -6,10 +6,6 @@
  - [x] Deberas tener un servidor al cual subir el aplicativo para su correcto funcionamiento (Esto debido a que se requiere un servidor con procesos de seguridad confiables)
  - [x] Dentro de Meta for Developers deberas crear un app especifica para este servicio
 
-### Pantalla de inicio:
-
- ![min](https://firebasestorage.googleapis.com/v0/b/hotelcris-48ee5.appspot.com/o/Screenshot%202023-02-06%20090059.png?alt=media&token=d9ade9e2-48d6-4a3a-b104-ce196f2e5f44)
-
 ### Respuesta inicial:
 
  ![min](https://firebasestorage.googleapis.com/v0/b/hotelcris-48ee5.appspot.com/o/Screenshot%202023-02-06%20090213.png?alt=media&token=c193b767-895f-4f17-9b78-1f86c427ff31)
