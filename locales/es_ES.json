@@ -1,0 +1,74 @@
+{
+	"compras": {
+		"start": "¿Tienes algo en mente o te gustaria mirar el catalogo?.",
+		"client": "{{firstName}}, vemos que ya haz interactuado con nosotros asi que nos alegra verte nuevamente por aquí.",
+		"catalog": "Perfecto claro que si, aquí tienes nuestro catalogo."
+	},
+	"desconocido": {
+		"warning": "Lo siento, no reconozco '{{userMessage}}' 😔",
+		"help": "Pero puedes usar el siguiente menu para navegar las opciones que necesites. 😊"
+	},
+	"bienvenida": {
+		"welcome": "Hola {{firstName}}!! ¿Como te encuentras el dia de hoy? nos alegra tenerte por aqui.",
+		"remember": "Recuerda que puedes usar el menu inferior para las diferentes opciones",
+		"help": "Aqui estamos para ayudarte 😊",
+		"end": "¿Hay algo mas en lo que podamos ayudarte {{firstName}}?"
+	},
+	"infoUsuario": {
+		"sinInfo": "{{firstName}} parece que no tenemos informacion tuya.",
+		"peticion": "¿Estas de acuerdo si te tomamos unos datos? 😏",
+		"noAcepta": "Lo sentimos {{firstName}} pero por politicas generales no podremos seguir con el proceso de compra 😔"
+	},
+	"quickReplyInfo": [
+		{
+			"content_type": "text",
+			"title": "Si!",
+			"payload": "si",
+			"image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Solid_green.svg/2048px-Solid_green.svg.png"
+		},
+		{
+			"content_type": "text",
+			"title": "No!",
+			"payload": "no",
+			"image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Solid_red.svg/512px-Solid_red.svg.png"
+		}
+	],
+	"catalogo": {
+		"mensaje": "Mira {{firstName}}, este es nuestro catalogo 🥰",
+		"leido": "Cuando hayas terminado de ver lo que te gustaria adquirir dale a la siguiente opcion para continuar. 😊"
+	},
+	"get_started": {
+		"mensaje": "😊 Hola! Te damos la bienvenida a nuestra pagina de ventas, esperamos poder satisfacer todas tus necesidades y solicitudes 😊"
+	},
+	"envios": {
+		"peticion": "{{firstName}} indicanos porfavor el numero de orden de tu pedido: ",
+		"noGuia": "{{firstName}} lo sentimos 😔, aun no se nos ha generado la guia para tu pedido, trabajaremos para que la puedas verificar lo mas rapido posible",
+		"guia": "{{guia}}, Mira {{firstName}} 😊, esta es la guia de envio, puedes realizar el seguimiento de tu pedido dando click en el link o yendo directamente a la pagina de la transportadora: https://www.servientrega.com/wps/portal/rastreo-envio/ 😏",
+		"noPedido": "{{firstName}}, no encontramos este numero de pedido en nuestra base de datos 🧐"
+	},
+	"inventario": {
+		"articulos": [
+			{
+				"id": "1",
+				"nombre": "Camara canon EOS",
+				"precio": "$2.149.000",
+				"url": "https://datatemptech.blob.core.windows.net/temp/camara.jpg",
+				"urlWeb": "https://www.mercadolibre.com.co/canon-eos-kit-4000d-lente-18-55mm-iii-dslr-color-negro/p/MCO15272920?pdp_filters=category:MCO1042#searchVariation=MCO15272920&position=2&search_layout=stack&type=product&tracking_id=64aa9122-df4b-4785-947c-f1441f1480f8"
+			}
+		]
+	},
+	"envioProducto": {
+		"mensaje": "Perfecto {{firstName}}, dinos porfa el id o el nombre completo del articulo que deseas 😊",
+		"noEncontrado": "Lo sentimos {{firstName}}, no tenemos nada parecido dentro de nuestro catalogo 😔"
+	},
+	"consultaCompras": {
+		"mensaje": "Mira {{firstName}}, estas han sido tus ultimas compras",
+		"cedula": "Para consultar tus compras danos porfa tu numero de cedula: ",
+		"cedulaDesconocida": "Lo sentimos {{firstName}}, pero esta cedula no se encuentra registrada o está incorrecta",
+		"noCompras": "{{firstName}} no tienes compras con nosotros aun, pero eso puede cambiar 😊"
+	},
+	"asesor": {
+		"celular": "Claro que si, danos porfa tu numero de telefono: ",
+		"contactar": "{{firstName}} en unos momentos uno de nuestros asesores se contactara contigo al numero: {{numero}} 😊"
+	}
+}

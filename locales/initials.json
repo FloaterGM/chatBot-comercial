@@ -1,0 +1,5 @@
+{
+    "saludos": ["hola", "buenas", "holi", "saludos", "empezar", "info", "interesado", "precio", "inicio"],
+    "peticionesAsesor": ["agente", "asesor", "venta", "ventas", "vendedor"],
+    "peticionesCompra": ["compras", "compra", "comprar"]
+}

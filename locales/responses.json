@@ -1,0 +1,139 @@
+{
+    "compras": {
+        "attachment": {
+            "type": "template",
+            "payload": {
+                "template_type": "generic",
+                "elements": [
+                    {
+                        "title": "¿Que deseas realizar?",
+                        "buttons": [
+                            {
+                                "type": "postback",
+                                "title": "Comprar algo para mi.",
+                                "payload": "paraMi"
+                            },
+                            {
+                                "type": "postback",
+                                "title": "Comprar un regalo para alguien.",
+                                "payload": "paraAlguien"
+                            },
+                            {
+                                "type": "postback",
+                                "title": "Ver mis compras.",
+                                "payload": "verCompras"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "infoUsuario": {
+        "text" : "Tal parece que aun no tenemos informacion tuya, agradeceria si llenaras unos datos. ¿Estas de acuerdo?",
+        "quick_replies":[
+          {
+            "content_type":"text",
+            "title":"Si!",
+            "payload":"si",
+            "image_url":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Solid_green.svg/2048px-Solid_green.svg.png"
+          },{
+            "content_type":"text",
+            "title":"No!",
+            "payload":"no",
+            "image_url":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Solid_red.svg/512px-Solid_red.svg.png"
+          }
+        ]
+      },
+      "menu_inicial": {
+        "text" : "El dia de hoy tenemos las siguientes opciones para ti",
+        "quick_replies":[
+          {
+            "content_type":"text",
+            "title":"Comprar",
+            "payload":"compras",
+            "image_url":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Solid_green.svg/2048px-Solid_green.svg.png"
+          },{
+            "content_type":"text",
+            "title":"Consultar estado de tu envio",
+            "payload":"envio",
+            "image_url":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Solid_green.svg/2048px-Solid_green.svg.png"
+          },{
+            "content_type":"text",
+            "title":"Consultar tus compras",
+            "payload":"consultaCompras",
+            "image_url":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Solid_green.svg/2048px-Solid_green.svg.png"
+          },{
+            "content_type":"text",
+            "title":"Contactar asesor",
+            "payload":"asesor",
+            "image_url":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Solid_green.svg/2048px-Solid_green.svg.png"
+          }
+        ]
+      },
+    "quickReplyInfo": [
+      {
+        "content_type":"text",
+        "title":"Si!",
+        "payload":"si",
+        "image_url":"https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Solid_green.svg/2048px-Solid_green.svg.png"
+      },{
+        "content_type":"text",
+        "title":"No!",
+        "payload":"no",
+        "image_url":"https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Solid_red.svg/512px-Solid_red.svg.png"
+      }
+    ],
+    "paraMi" : {
+        "attachment": {
+          "type": "template",
+          "payload": {
+            "template_type": "generic",
+            "elements": [
+              {
+                "title": "¿Que tienes planeado comprar?",
+                "buttons": [
+                  {
+                    "type": "postback",
+                    "title": "Electronicos",
+                    "payload": "electronicos"
+                  }, {
+                    "type": "postback",
+                    "title": "Accesorios para celular.",
+                    "payload": "accesoriosMovil"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+    "paraAlguien" : {
+        "attachment": {
+          "type": "template",
+          "payload": {
+            "template_type": "generic",
+            "elements": [
+              {
+                "title": "¿Que deseas realizar?",
+                "buttons": [
+                  {
+                    "type": "postback",
+                    "title": "Comprar algo para mi.",
+                    "payload": "paraMi"
+                  }, {
+                    "type": "postback",
+                    "title": "Comprar un regalo para alguien.",
+                    "payload": "paraAlguien"
+                  }, {
+                    "type": "postback",
+                    "title": "Ver mis compras.",
+                    "payload": "verCompras"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+}
