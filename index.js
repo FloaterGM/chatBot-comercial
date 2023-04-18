@@ -2,19 +2,23 @@
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const { handleMessage, handlePostback, handleQuickReply, updateEstado, repetir } = require('./services/Handling')
+const { handleMessage, handlePostback, handleQuickReply, repetir, entrenamiento} = require('./services/Handling')
 const i18n = require('./i18n.config')
 const { genStart } = require('./services/tempGeneration')
-const { getStarted } = require('./services/graphApi')
+const { getStarted, persistent } = require('./services/graphApi')
 
 const app = express().use(bodyParser.json());
 
 start()
+entrenamiento()
 
 // Creacion de pantalla de inicio
 async function start() {
+  //Se usa la funcion creada para generar el mensaje de bienvenida
   let syntax = genStart(i18n.__('get_started.mensaje'))
+  //Se llama al API para dicho fin
   getStarted(syntax)
+  persistent()
 }
 
 // Conexion al api de messenger mediante el webhook

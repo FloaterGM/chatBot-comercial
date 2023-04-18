@@ -1,11 +1,18 @@
 {
   "dependencies": {
     "body-parser": "^1.20.1",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "i18n": "^0.15.1",
+    "natural": "^6.2.0",
+    "nltk": "^0.0.1",
     "node-fetch": "^2.6.6",
+    "nodemailer": "^6.9.1",
     "request": "^2.88.2",
     "rest-mssql-nodejs": "^1.0.10",
     "tedious": "^15.1.2"
+  },
+  "scripts": {
+    "start": "node index.js"
   }
 }

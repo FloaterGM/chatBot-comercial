@@ -1,6 +1,7 @@
 const request = require('request');
 const fetch = require("node-fetch")
 const { URL, URLSearchParams } = require("url")
+require('dotenv').config()
 
 //Llamado al api de envio de mensajes
 function callSendAPI(sender_psid, response) {
@@ -36,6 +37,7 @@ async function callUserAPI(sender_psid) {
   try {
     let response = await fetch(url, { method: "GET" });
     let userData = await response.json()
+    console.log(userData.firstName)
     return { firstName: userData.first_name, lastName: userData.last_name }
   }
   catch (error) {
@@ -63,5 +65,52 @@ async function getStarted(syntax) {
   })
 }
 
+
+//Se crea el menu persistente del chat
+async function persistent() {
+  const requestBody = {
+    "persistent_menu": [
+      {
+          "locale": "default",
+          "composer_input_disabled": false,
+          "call_to_actions": [
+              {
+                  "type": "postback",
+                  "title": "Compras",
+                  "payload": "compras"
+              },
+              {
+                  "type": "postback",
+                  "title": "Consultar envio",
+                  "payload": "envios"
+              },
+              {
+                  "type": "postback",
+                  "title": "Consultar compras",
+                  "payload": "consultaCompras"
+              },{
+                  "type": "postback",
+                  "title": "Contactar Asesor",
+                  "payload": "asesor"
+              }
+          ]
+      }
+  ]
+  };
+
+  request({
+    'uri': 'https://graph.facebook.com/v15.0/me/messenger_profile',
+    'qs': { 'access_token': process.env.PAGE_ACCESS_TOKEN },
+    'method': 'POST',
+    'json': requestBody
+  }, (err, res, body) => {
+    if (!err) {
+      console.log("Mensaje enviado de manera exitosa")
+    } else {
+      console.error("Imposible enviar mensaje")
+    }
+  })
+}
+
 //Se realiza el exporte de funciones para su uso en otros servicios
-module.exports = { callSendAPI, callUserAPI, getStarted }
+module.exports = { callSendAPI, callUserAPI, getStarted, persistent }

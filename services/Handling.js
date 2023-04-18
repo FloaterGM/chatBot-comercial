@@ -7,7 +7,56 @@ const responses = JSON.parse(jsonResponse)
 const { Request, TYPES, Connection } = require('tedious')
 const i18n = require('../i18n.config')
 const { genQuickReply, genText, genGenericTemplate } = require('./tempGeneration')
+const natural = require('natural')
+const tokenizer = new natural.WordTokenizer();
+const classifier = new natural.BayesClassifier();
 const userPSID = {}
+
+//Entrenamiento funcion de lenguaje natural 
+function entrenamiento() {
+  classifier.addDocument('Eres un idiota', 'insulto');
+  classifier.addDocument('No estás entendiendo mi pregunta, esto es frustrante.', 'insulto');
+  classifier.addDocument('Tus respuestas son demasiado vagas y no me están ayudando.', 'insulto');
+  classifier.addDocument('Me estás dando información equivocada.', 'insulto');
+  classifier.addDocument('Me estás haciendo perder el tiempo con respuestas irrelevantes.', 'insulto');
+  classifier.addDocument('No me gustó cómo me trataste. No eres amigable ni servicial.', 'insulto');
+  classifier.addDocument('No puedo creer que no sepas cómo responder a esta pregunta básica.', 'insulto');
+  classifier.addDocument('Me estás dando la misma respuesta una y otra vez.', 'insulto');
+  classifier.addDocument('Tu servicio es lento e ineficiente. Esperé demasiado tiempo para obtener una respuesta.', 'insulto');
+  classifier.addDocument('No me gusta cómo estás diseñado. Tu interfaz es confusa y difícil de usar.', 'insulto');
+  classifier.addDocument('Eres demasiado limitado. No puedes responder preguntas fuera de tu programación preestablecida.', 'insulto');
+  classifier.addDocument('Vete al diablo', 'insulto');
+  classifier.addDocument('Gracias por nada imbecil', 'insulto');
+  classifier.addDocument('Que bot mas inutil', 'insulto');
+  classifier.addDocument('Bot mas sapo', 'insulto');
+  classifier.addDocument('Mera peye de bot', 'insulto');
+  classifier.addDocument('Que bot tan asqueroso', 'insulto');
+  classifier.addDocument('Gas este bot', 'insulto');
+  classifier.addDocument('Eres genial', 'no insulto');
+  classifier.addDocument('Me encanta trabajar contigo', 'no insulto');
+  classifier.addDocument('Gracias por la ayuda', 'no insulto');
+  classifier.addDocument('Me gustaria comprar', 'no insulto');
+  classifier.addDocument('¡Gracias! Me has ayudado mucho con mi consulta.', 'no insulto');
+  classifier.addDocument('¡Excelente trabajo! Me has brindado la información que necesitaba.', 'no insulto');
+  classifier.addDocument('¡Eres un gran asistente virtual! Siempre respondes de manera rápida y precisa.', 'no insulto');
+  classifier.addDocument('¡Impresionante! Me encanta cómo interactúas conmigo y me haces sentir cómodo.', 'no insulto');
+  classifier.addDocument('¡Fantástico! Nunca me había sentido tan bien atendido por un chatbot antes.', 'no insulto');
+  classifier.addDocument('¡Increíble! Me encanta cómo utilizas el lenguaje natural para entender mis necesidades y brindarme una solución adecuada.', 'no insulto');
+  classifier.addDocument('¡Estupendo! Me has ahorrado mucho tiempo y esfuerzo al responder mis preguntas de manera tan eficiente.', 'no insulto');
+  classifier.addDocument('¡Brillante! Realmente aprecio la manera en que me has guiado a través del proceso de registro/pedido/consulta.', 'no insulto');
+  classifier.addDocument('¡Fantástico trabajo! Me has dado una experiencia de usuario increíblemente agradable.', 'no insulto');
+  classifier.addDocument('¡Excelente servicio! Me gusta cómo siempre estás disponible para ayudarme, incluso fuera del horario de atención al cliente.', 'no insulto');
+  classifier.addDocument('¡Maravilloso! Me encanta cómo personalizas tus respuestas para adaptarte a mis necesidades específicas.', 'no insulto');
+  classifier.addDocument('¡Fantástica herramienta! Gracias por brindarme una solución tan útil y fácil de usar.', 'no insulto');
+  classifier.train();
+}
+
+function detectorDeInsultos(texto) {
+  const words = tokenizer.tokenize(texto.toLowerCase())
+  const label = classifier.classify(words)
+
+  return label === 'insulto'
+}
 
 // Funcion inicial de consulta
 function repetir(sender_psid) {
@@ -72,7 +121,7 @@ async function handlePostback(sender_psid, received_postback) {
       callSendAPI(sender_psid, response)
     }, 2000)
     setTimeout(() => {
-      response = genQuickReply(i18n.__('bienvenida.help'), [{
+      response = genQuickReply(i18n.__('bienvenida.end', { firstName: userInfo.firstName }), [{
         title: 'Compras',
         payload: 'compras'
       }, {
@@ -81,6 +130,9 @@ async function handlePostback(sender_psid, received_postback) {
       }, {
         title: 'Consultar compras',
         payload: 'consultaCompras'
+      }, {
+        title: 'Factura',
+        payload: 'factura'
       }, {
         title: 'Contactar asesor',
         payload: 'asesor'
@@ -121,6 +173,9 @@ async function handlePostback(sender_psid, received_postback) {
         }, {
           title: 'Consultar compras',
           payload: 'consultaCompras'
+        }, {
+          title: 'Factura',
+          payload: 'factura'
         }, {
           title: 'Contactar asesor',
           payload: 'asesor'
@@ -180,6 +235,9 @@ async function handleQuickReply(sender_psid, received_message, pay) {
         }, {
           title: 'Consultar compras',
           payload: 'consultaCompras'
+        }, {
+          title: 'Factura',
+          payload: 'factura'
         }, {
           title: 'Contactar asesor',
           payload: 'asesor'
@@ -277,6 +335,9 @@ async function handleQuickReply(sender_psid, received_message, pay) {
       title: 'Consultar compras',
       payload: 'consultaCompras'
     }, {
+      title: 'Factura',
+      payload: 'factura'
+    }, {
       title: 'Contactar asesor',
       payload: 'asesor'
     }])
@@ -302,6 +363,9 @@ async function handleQuickReply(sender_psid, received_message, pay) {
           title: 'Consultar compras',
           payload: 'consultaCompras'
         }, {
+          title: 'Factura',
+          payload: 'factura'
+        }, {
           title: 'Contactar asesor',
           payload: 'asesor'
         }])
@@ -312,12 +376,17 @@ async function handleQuickReply(sender_psid, received_message, pay) {
     setTimeout(() => {
       updateEstado(sender_psid, 'consultaAsesor')
     }, 1000);
+  } else if (payload == 'factura') {
+    response = genText('Claro, ingresa porfa el numero de pedido: ')
+    userPSID[sender_psid].flag = 9
   }
   callSendAPI(sender_psid, response)
 }
 
 // Funcion de manejo de mensajes
 async function handleMessage(sender_psid, received_message) {
+
+
   let response
   //Se llama el api para usar los datos de usuario
   let userInfo = await callUserAPI(sender_psid)
@@ -343,16 +412,15 @@ async function handleMessage(sender_psid, received_message) {
   } else if (userPSID[sender_psid].flag == 4) {
     userPSID[sender_psid].correo = received_message.text
     response = {
-      "text": `¿Es esta informacion correcta? cedula: ${userPSID[sender_psid].cedula}, Nombre: ${userPSID[sender_psid].nombre}, Cel: ${userPSID[sender_psid].celular}, Correo: ${userPSID[sender_psid].correo}`,
+      "text": `¿Es esta informacion correcta? cedula: ${userPSID[sender_psid].cedula}, Nombre: ${userPSID[sender_psid].nombre}, Cel: ${userPSID[sender_psid].cel}, Correo: ${userPSID[sender_psid].correo}`,
       "quick_replies": responses.quickReplyInfo
     }
   } else if (userPSID[sender_psid].flag == 5) {
-    if (userPSID[sender_psid].compras.find(compra => compra.ordenPedido == received_message.text)) {
-      pedido = userPSID[sender_psid].compras.find(compra => compra.ordenPedido == received_message.text)
+    if (userPSID[sender_psid].compras.find(compra => compra.nOrden == received_message.text)) {
+      pedido = userPSID[sender_psid].compras.find(compra => compra.nOrden == received_message.text)
       console.log(pedido)
       if (pedido.guia == null) {
         response = genText(i18n.__('envios.noGuia', { firstName: userInfo.firstName }))
-        userPSID[sender_psid].ordenPedido = received_message.text
         userPSID[sender_psid].flag = 0
         setTimeout(() => {
           response = genQuickReply(i18n.__('bienvenida.end', { firstName: userInfo.firstName }), [{
@@ -364,6 +432,9 @@ async function handleMessage(sender_psid, received_message) {
           }, {
             title: 'Consultar compras',
             payload: 'consultaCompras'
+          }, {
+            title: 'Factura',
+            payload: 'factura'
           }, {
             title: 'Contactar asesor',
             payload: 'asesor'
@@ -384,6 +455,9 @@ async function handleMessage(sender_psid, received_message) {
             title: 'Consultar compras',
             payload: 'consultaCompras'
           }, {
+            title: 'Factura',
+            payload: 'factura'
+          }, {
             title: 'Contactar asesor',
             payload: 'asesor'
           }])
@@ -403,6 +477,9 @@ async function handleMessage(sender_psid, received_message) {
         }, {
           title: 'Consultar compras',
           payload: 'consultaCompras'
+        }, {
+          title: 'Factura',
+          payload: 'factura'
         }, {
           title: 'Contactar asesor',
           payload: 'asesor'
@@ -428,6 +505,9 @@ async function handleMessage(sender_psid, received_message) {
         }, {
           title: 'Consultar compras',
           payload: 'consultaCompras'
+        }, {
+          title: 'Factura',
+          payload: 'factura'
         }, {
           title: 'Contactar asesor',
           payload: 'asesor'
@@ -470,6 +550,9 @@ async function handleMessage(sender_psid, received_message) {
             title: 'Consultar compras',
             payload: 'consultaCompras'
           }, {
+            title: 'Factura',
+            payload: 'factura'
+          }, {
             title: 'Contactar asesor',
             payload: 'asesor'
           }])
@@ -487,6 +570,9 @@ async function handleMessage(sender_psid, received_message) {
           }, {
             title: 'Consultar compras',
             payload: 'consultaCompras'
+          }, {
+            title: 'Factura',
+            payload: 'factura'
           }, {
             title: 'Contactar asesor',
             payload: 'asesor'
@@ -506,6 +592,9 @@ async function handleMessage(sender_psid, received_message) {
         }, {
           title: 'Consultar compras',
           payload: 'consultaCompras'
+        }, {
+          title: 'Factura',
+          payload: 'factura'
         }, {
           title: 'Contactar asesor',
           payload: 'asesor'
@@ -528,12 +617,85 @@ async function handleMessage(sender_psid, received_message) {
         title: 'Consultar compras',
         payload: 'consultaCompras'
       }, {
+        title: 'Factura',
+        payload: 'factura'
+      }, {
         title: 'Contactar asesor',
         payload: 'asesor'
       }])
       callSendAPI(sender_psid, response)
       insertAsesoria(userAsesoria)
     }, 2000);
+  } else if (userPSID[sender_psid].flag == 9) {
+    if (userPSID[sender_psid].compras.find(compra => compra.nOrden == received_message.text)) {
+      response = genText('Claro, dentro de las proximas horas te llegara la factura al correo, muchas gracias por comunicarte')
+      const nodemailer = require('nodemailer');
+
+      const transporter = nodemailer.createTransport({
+        service: 'hotmail',
+        auth: {
+          user: 'cvalenciah@cesde.edu.co',
+          pass: 'Cesde2022*'
+        }
+      });
+
+      let mailOptions = {
+        from: 'cvalenciah@cesde.edu.co',
+        to: 'vcristobal3@gmail.com',
+        subject: 'Parcero, alguien necesita la factura',
+        text: `El usuario ${userPSID[sender_psid].nombre} requiere que se le envie la factura del pedido ${received_message.text} al correo ${userPSID[sender_psid].correo}`
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error.message);
+        } else {
+          console.log('Email enviado');
+        }
+      });
+
+      setTimeout(() => {
+        response = genQuickReply(i18n.__('bienvenida.end', { firstName: userInfo.firstName }), [{
+          title: 'Compras',
+          payload: 'compras'
+        }, {
+          title: 'Consultar envio',
+          payload: 'envios'
+        }, {
+          title: 'Consultar compras',
+          payload: 'consultaCompras'
+        }, {
+          title: 'Factura',
+          payload: 'factura'
+        }, {
+          title: 'Contactar asesor',
+          payload: 'asesor'
+        }])
+        callSendAPI(sender_psid, response)
+      }, 1500);
+    } else {
+      response = genText('Lo sentimos pero este numero de pedido no existe en nuestra base de datos, o no es un pedido de tu lista de compras.')
+      setTimeout(() => {
+        response = genQuickReply(i18n.__('bienvenida.end', { firstName: userInfo.firstName }), [{
+          title: 'Compras',
+          payload: 'compras'
+        }, {
+          title: 'Consultar envio',
+          payload: 'envios'
+        }, {
+          title: 'Consultar compras',
+          payload: 'consultaCompras'
+        }, {
+          title: 'Factura',
+          payload: 'factura'
+        }, {
+          title: 'Contactar asesor',
+          payload: 'asesor'
+        }])
+        callSendAPI(sender_psid, response)
+      }, 1500);
+    }
+    userPSID[sender_psid].flag = 0
   } else {
     if (initials.saludos.find(saludo => saludo === received_message.text.toLowerCase())) {
       setTimeout(() => {
@@ -545,7 +707,7 @@ async function handleMessage(sender_psid, received_message) {
         callSendAPI(sender_psid, response)
       }, 2000)
       setTimeout(() => {
-        response = genQuickReply(i18n.__('bienvenida.help'), [{
+        response = genQuickReply(i18n.__('bienvenida.end', { firstName: userInfo.firstName }), [{
           title: 'Compras',
           payload: 'compras'
         }, {
@@ -554,6 +716,9 @@ async function handleMessage(sender_psid, received_message) {
         }, {
           title: 'Consultar compras',
           payload: 'consultaCompras'
+        }, {
+          title: 'Factura',
+          payload: 'factura'
         }, {
           title: 'Contactar asesor',
           payload: 'asesor'
@@ -592,27 +757,70 @@ async function handleMessage(sender_psid, received_message) {
           }, 2000)
         }
       }, 1500)
+    } else if (received_message.text.toLowerCase() == 'tengo una pregunta.') {
+      response = genQuickReply(i18n.__('bienvenida.end', { firstName: userInfo.firstName }), [{
+        title: 'Compras',
+        payload: 'compras'
+      }, {
+        title: 'Consultar envio',
+        payload: 'envios'
+      }, {
+        title: 'Consultar compras',
+        payload: 'consultaCompras'
+      }, {
+        title: 'Factura',
+        payload: 'factura'
+      }, {
+        title: 'Contactar asesor',
+        payload: 'asesor'
+      }])
     } else {
-      setTimeout(() => {
-        response = genText(i18n.__('desconocido.warning', { userMessage: received_message.text }))
-        callSendAPI(sender_psid, response)
-      }, 1000)
-      setTimeout(() => {
-        response = genQuickReply(i18n.__('desconocido.help'), [{
-          title: 'Compras',
-          payload: 'compras'
-        }, {
-          title: 'Consultar envio',
-          payload: 'envios'
-        }, {
-          title: 'Consultar compras',
-          payload: 'consultaCompras'
-        }, {
-          title: 'Contactar asesor',
-          payload: 'asesor'
-        }])
-        callSendAPI(sender_psid, response)
-      }, 2000)
+      if (detectorDeInsultos(received_message.text)) {
+        response = genText(i18n.__('respuestaNegativa'))
+        setTimeout(() => {
+          response = genQuickReply(i18n.__('bienvenida.end', { firstName: userInfo.firstName }), [{
+            title: 'Compras',
+            payload: 'compras'
+          }, {
+            title: 'Consultar envio',
+            payload: 'envios'
+          }, {
+            title: 'Consultar compras',
+            payload: 'consultaCompras'
+          }, {
+            title: 'Factura',
+            payload: 'factura'
+          }, {
+            title: 'Contactar asesor',
+            payload: 'asesor'
+          }])
+          callSendAPI(sender_psid, response)
+        }, 700);
+      } else {
+        setTimeout(() => {
+          response = genText(i18n.__('desconocido.warning', { userMessage: received_message.text }))
+          callSendAPI(sender_psid, response)
+        }, 1000)
+        setTimeout(() => {
+          response = genQuickReply(i18n.__('bienvenida.end', { firstName: userInfo.firstName }), [{
+            title: 'Compras',
+            payload: 'compras'
+          }, {
+            title: 'Consultar envio',
+            payload: 'envios'
+          }, {
+            title: 'Consultar compras',
+            payload: 'consultaCompras'
+          }, {
+            title: 'Factura',
+            payload: 'factura'
+          }, {
+            title: 'Contactar asesor',
+            payload: 'asesor'
+          }])
+          callSendAPI(sender_psid, response)
+        }, 2000)
+      }
     }
   }
   callSendAPI(sender_psid, response)
@@ -628,17 +836,17 @@ function consulta(psid) {
   }
   let cedula
   let conexion = new Connection({
-    server: 'pepeelchispa.database.windows.net',
+    server: 'localhost',
     authentication: {
       type: 'default',
       options: {
         userName: 'cvalenciah',
-        password: 'Cris123.'
+        password: 'cris123.'
       }
     },
     options: {
-      encrypt: true,
-      database: 'chatbotTempTech'
+      database: 'chatbotTempTech',
+      trustServerCertificate: true
     }
   })
 
@@ -679,7 +887,6 @@ function consulta(psid) {
         });
         var result = "";
         userPSID[psid].compras = []
-        console.log(userPSID[psid].compras)
         request2.on('row', function (columns) {
           let compra = {}
           columns.forEach(column => {
@@ -696,7 +903,6 @@ function consulta(psid) {
               }
             });
             var result = "";
-            console.log(userPSID[psid].compras)
             request2.on('row', function (columns) {
               let estado = {}
               columns.forEach(column => {
@@ -721,17 +927,17 @@ function consulta(psid) {
 // Insercion de datos de usuario
 function insert(userData) {
   let conexion = new Connection({
-    server: 'pepeelchispa.database.windows.net',
+    server: 'localhost',
     authentication: {
       type: 'default',
       options: {
         userName: 'cvalenciah',
-        password: 'Cris123.'
+        password: 'cris123.'
       }
     },
     options: {
-      encrypt: true,
-      database: 'chatbotTempTech'
+      database: 'chatbotTempTech',
+      trustServerCertificate: true
     }
   })
 
@@ -775,17 +981,17 @@ function insert(userData) {
 // Insercion para el contacto de asesor
 function insertAsesoria(userData) {
   let conexion = new Connection({
-    server: 'pepeelchispa.database.windows.net',
+    server: 'localhost',
     authentication: {
       type: 'default',
       options: {
         userName: 'cvalenciah',
-        password: 'Cris123.'
+        password: 'cris123.'
       }
     },
     options: {
-      encrypt: true,
-      database: 'chatbotTempTech'
+      database: 'chatbotTempTech',
+      trustServerCertificate: true
     }
   })
 
@@ -827,17 +1033,17 @@ function insertAsesoria(userData) {
 // Actualizacion de estados
 function updateEstado(psid, estado) {
   let conexion = new Connection({
-    server: 'pepeelchispa.database.windows.net',
+    server: 'localhost',
     authentication: {
       type: 'default',
       options: {
         userName: 'cvalenciah',
-        password: 'Cris123.'
+        password: 'cris123.'
       }
     },
     options: {
-      encrypt: true,
-      database: 'chatbotTempTech'
+      database: 'chatbotTempTech',
+      trustServerCertificate: true
     }
   })
 
@@ -850,32 +1056,32 @@ function updateEstado(psid, estado) {
   })
 
   setTimeout(() => {
-      const request = new Request("insert into estados values (@psid, @estado, @fecha)", function (err) {
-        if (err) {
-          console.log(err);
+    const request = new Request("insert into estados values (@psid, @estado, @fecha)", function (err) {
+      if (err) {
+        console.log(err);
+      }
+    });
+    request.addParameter('psid', TYPES.VarChar, psid);
+    request.addParameter('estado', TYPES.VarChar, estado);
+    request.addParameter('fecha', TYPES.Date, new Date());
+    request.on('row', function (columns) {
+      columns.forEach(function (column) {
+        if (column.value === null) {
+          console.log('NULL');
+        } else {
+          console.log("Product id of inserted item is " + column.value);
         }
       });
-      request.addParameter('psid', TYPES.VarChar, psid);
-      request.addParameter('estado', TYPES.VarChar, estado);
-      request.addParameter('fecha', TYPES.Date, new Date());
-      request.on('row', function (columns) {
-        columns.forEach(function (column) {
-          if (column.value === null) {
-            console.log('NULL');
-          } else {
-            console.log("Product id of inserted item is " + column.value);
-          }
-        });
-      });
+    });
 
-      // Close the connection after the final event emitted by the request, after the callback passes
-      request.on("requestCompleted", function (rowCount, more) {
-        conexion.close
-      });
-      conexion.execSql(request);
+    // Close the connection after the final event emitted by the request, after the callback passes
+    request.on("requestCompleted", function (rowCount, more) {
+      conexion.close
+    });
+    conexion.execSql(request);
   }, 3500);
 }
 
 
 //Se realiza el exporte de las funciones para el correcto funcionamiento del bot
-module.exports = { handleMessage, handlePostback, handleQuickReply, repetir, updateEstado }
+module.exports = { handleMessage, handlePostback, handleQuickReply, repetir, updateEstado, entrenamiento }
